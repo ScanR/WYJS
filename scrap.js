@@ -1,10 +1,17 @@
 const fs = require('fs');
 const { parse }= require('node-html-parser');
 const Canvas = require("@napi-rs/canvas");
-const readline = require('readline').createInterface({
+const rl = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout
 });
+
+rl._writeToOutput = function _writeToOutput(stringToWrite) {
+    if (!rl.stdoutMuted)
+        rl.output.write(stringToWrite);
+    else 
+        rl.output.write("\x1B[2K\x1B[200DEntrez votre mot de passe : ")
+};
 
 const scrappingSeries = {
     onk : "『【推しの子】』／赤坂アカ╳横槍メンゴ",
@@ -16,20 +23,37 @@ const path = "./series"
 
 let cid;
 let Cookie;
+let youngJumpCookie;
 
-readline.question("Entrez les cookies :",(cookie => {
-    Cookie = cookie;
-    console.log(cookie);
-    readline.question("Entrez le cid (dernier jump par défaut) :",id =>{
+rl.stdoutMuted = false;
+if(!fs.existsSync("./config.json")){
+    rl.question("Entrez votre email : ",email =>{
+        rl.stdoutMuted = true;
+        rl.question("Entrez votre mot de passe : ", password =>{
+            const config = {email:email,password:password};
+            fs.writeFileSync("./config.json",JSON.stringify(config));
+            rl.stdoutMuted = false;
+            rl.question("Entrez le cid (dernier jump par défaut) : ",id =>{
+                cid = id;
+                main();
+                rl.close()
+            })
+        })
+    })
+}else{
+    rl.question("Entrez le cid (dernier jump par défaut) : ",id =>{
         cid = id;
         main();
-        readline.close()
+        rl.close()
     })
-}));
+}
+
+
 
 
 const main = async () => {
-
+    
+    if(!(await getGlobalCookie())) return;
 
     if(!fs.existsSync(path)) fs.mkdirSync(path);
     const masterObject = {}
@@ -70,6 +94,68 @@ const main = async () => {
 
 }
 
+const getGlobalCookie = async () => {
+    let cookieFile;
+    let isExpire = false;
+    let cookie;
+    if(fs.existsSync("./cookie.json")){
+        cookieFile = fs.readFileSync("./cookie.json");
+        try{
+            const cookieJson = JSON.parse(cookieFile);
+            new Date(cookieJson.expire);
+            const expire = cookieJson.expire;
+            if((new Date()).getTime() >= expire) isExpire = true;
+            else cookie = cookieJson;
+        }catch {
+            isExpire = true;
+        }
+    }
+    if(!cookieFile || isExpire){
+        const nonce = await fetch("https://www.youngjump.world/wp-json/login/check").then(res => res.json());
+        let config;
+        configFile = fs.readFileSync("./config.json");
+        try{
+            config = JSON.parse(configFile);
+            if(!config.email || !config.password) {
+                console.log("Le fichier config.json est incorrect, veuillez recommencer");
+                fs.rmSync("./config.json")
+                return false;
+            }
+        }catch {
+            console.log("Le fichier de config.json est incorrect, veuillez recommencer");
+            fs.rmSync("./config.json")
+            return false;
+        }
+        const body = {
+            "login_usermail":config.email,
+            "login_password":config.password,
+            "nonce": nonce.nonce,
+            "rememberme": 1
+        }
+        try{
+            const res = await fetch("https://www.youngjump.world/wp-json/login/signin",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(body)})
+                .then(res => res);
+            console.log(res.headers.getSetCookie())
+            const cookieGlobal = res.headers.getSetCookie().filter(e => e.startsWith("wordpress_logged_in"))[0].split("; ")
+            console.log(cookieGlobal)
+            const expire = new Date(cookieGlobal[1].slice(8)).getTime();
+            cookie = {
+                cookie:cookieGlobal[0],
+                expire:expire
+            }
+            console.log(cookie)
+            fs.writeFileSync("./cookie.json",JSON.stringify(cookie));
+        }catch(e){
+            console.log("Les informations de connection sont erronnés, veuillez recommencer");
+            console.log(e);
+            fs.rmSync("./config.json")
+            return false;
+        }
+    }   
+    Cookie = cookie.cookie;
+    return true;
+}
+
 const downloader = (folder,masterObject) =>{
     return async (value,index) => {
         const image = await unscrap(value,masterObject);
@@ -97,14 +183,17 @@ const unscrap = async (pageUse,masterObject) => {
 const getBibInfo = async (masterObject) => {
     const bibGetCntntInfoURL = `https://www.youngjump.world/sws/apis/bibGetCntntInfo.php?cid=${masterObject.cid}&dmytime=${masterObject.dmytime}&k=${masterObject.k}&u1=${masterObject.u1}`
     
-    const jsonBib = await fetch(bibGetCntntInfoURL,{headers:{"Cookie":Cookie}}).then(res => res.json());
+    const jsonBib = await fetch(bibGetCntntInfoURL,{headers:{"Cookie":Cookie}}).then(res => {
+        youngJumpCookie = res.headers.getSetCookie().map(e => e.split(";")[0]).join("; ");
+        return res.json()
+    });
     
     return z(jsonBib,masterObject.cid,masterObject.k)
 }
 
 const getJsonContent = async (masterObject) => {
     const contentUrl = `https://www.youngjump.world/books/${masterObject.cid}/1/content?dmytime=${masterObject.dmytime}&u1=${masterObject.u1}`
-    return await fetch(contentUrl,{headers:{"Cookie":Cookie}}).then(res => res.json());
+    return await fetch(contentUrl,{headers:{"Cookie":youngJumpCookie}}).then(res => res.json());
 }
 
 const kt = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -1, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, -1, -1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, 63, -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -1, -1];
