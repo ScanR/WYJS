@@ -161,7 +161,7 @@ const downloader = (folder,masterObject) =>{
 }
 
 const unscrap = async (pageUse,masterObject) => {
-        const bufferImage = await fetch(`${masterObject.baseImage}${pageUse.src}?dmytime=${masterObject.dmytime}&u1=${masterObject.u1}`,{headers:{"Cookie":Cookie}}).then(res => res.arrayBuffer());
+        const bufferImage = await fetch(`${masterObject.baseImage}${pageUse.src}?dmytime=${masterObject.dmytime}&u1=${masterObject.u1}`,{headers:{"Cookie":youngJumpCookie}}).then(res => res.arrayBuffer());
 
         const image = await Canvas.loadImage(Buffer.from(bufferImage));
         const width = image.width;
