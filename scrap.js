@@ -135,15 +135,12 @@ const getGlobalCookie = async () => {
         try{
             const res = await fetch("https://www.youngjump.world/wp-json/login/signin",{method:"POST",headers:{"Content-Type": "application/json"},body:JSON.stringify(body)})
                 .then(res => res);
-            console.log(res.headers.getSetCookie())
             const cookieGlobal = res.headers.getSetCookie().filter(e => e.startsWith("wordpress_logged_in"))[0].split("; ")
-            console.log(cookieGlobal)
             const expire = new Date(cookieGlobal[1].slice(8)).getTime();
             cookie = {
                 cookie:cookieGlobal[0],
                 expire:expire
             }
-            console.log(cookie)
             fs.writeFileSync("./cookie.json",JSON.stringify(cookie));
         }catch(e){
             console.log("Les informations de connection sont erronnés, veuillez recommencer");
