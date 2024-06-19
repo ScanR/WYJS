@@ -11,6 +11,7 @@
   "dependencies": {
     "@angablue/exe": "^2.1.1",
     "@napi-rs/canvas": "^0.1.44",
+    "@napi-rs/canvas-darwin-arm64": "^0.1.53",
     "node-html-parser": "^6.1.11"
   }
 }
