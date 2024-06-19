@@ -91,4 +91,4 @@ Ce projet est un scrapper pour le Weekly Young Jump. Il permet de récupérer au
    ```
 2. Lors de l'exécution, vous serez invité à entrer votre email et mot de passe du compte Young Jump.
 
-3. Le scrapper récupérera alors les séries disponibles sur votre compte et les enregistrera dans le dossier `séries`.
+3. Le scrapper récupérera alors les séries et les enregistrera dans le dossier `séries`.
