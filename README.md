@@ -8,55 +8,65 @@ Ce projet est un scrapper pour le Weekly Young Jump. Il permet de récupérer au
 
 ### Installation de Node.js 18
 
-#### Windows
+<details>
+  <summary>Windows</summary>
 
-1. Allez sur le site officiel de Node.js [nodejs.org](https://nodejs.org/).
-2. Téléchargez l'installateur pour Windows (version 18.x.x LTS).
-3. Exécutez l'installateur et suivez les instructions à l'écran.
-4. Vérifiez l'installation en ouvrant une invite de commandes et en tapant :
-   ```bash
-   node -v
-   ```
-   Vous devriez voir la version 18.x.x s'afficher.
+  ### Installation sur Windows
+  1. Allez sur le site officiel de Node.js [nodejs.org](https://nodejs.org/).
+  2. Téléchargez l'installateur pour Windows (version 18.x.x LTS).
+  3. Exécutez l'installateur et suivez les instructions à l'écran.
+  4. Vérifiez l'installation en ouvrant une invite de commandes et en tapant :
+     ```bash
+     node -v
+     ```
+     Vous devriez voir la version 18.x.x s'afficher.
+</details>
 
-#### macOS
+<details>
+  <summary>macOS</summary>
 
-1. Allez sur le site officiel de Node.js [nodejs.org](https://nodejs.org/).
-2. Téléchargez l'installateur pour macOS (version 18.x.x LTS).
-3. Exécutez l'installateur et suivez les instructions à l'écran.
-4. Vérifiez l'installation en ouvrant le terminal et en tapant :
-   ```bash
-   node -v
-   ```
-   Vous devriez voir la version 18.x.x s'afficher.
+  ### Installation sur macOS
+  1. Allez sur le site officiel de Node.js [nodejs.org](https://nodejs.org/).
+  2. Téléchargez l'installateur pour macOS (version 18.x.x LTS).
+  3. Exécutez l'installateur et suivez les instructions à l'écran.
+  4. Vérifiez l'installation en ouvrant le terminal et en tapant :
+     ```bash
+     node -v
+     ```
+     Vous devriez voir la version 18.x.x s'afficher.
+</details>
 
-#### Linux
+<details>
+  <summary>Linux</summary>
 
-Pour les distributions basées sur Debian et Ubuntu :
+  ### Installation sur Linux
 
-1. Ouvrez un terminal et exécutez les commandes suivantes :
-   ```bash
-   curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-   sudo apt-get install -y nodejs
-   ```
-2. Vérifiez l'installation en tapant :
-   ```bash
-   node -v
-   ```
-   Vous devriez voir la version 18.x.x s'afficher.
+  Pour les distributions basées sur Debian et Ubuntu :
 
-Pour les distributions basées sur Red Hat et CentOS :
+  1. Ouvrez un terminal et exécutez les commandes suivantes :
+     ```bash
+     curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+     sudo apt-get install -y nodejs
+     ```
+  2. Vérifiez l'installation en tapant :
+     ```bash
+     node -v
+     ```
+     Vous devriez voir la version 18.x.x s'afficher.
 
-1. Ouvrez un terminal et exécutez les commandes suivantes :
-   ```bash
-   curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
-   sudo yum install -y nodejs
-   ```
-2. Vérifiez l'installation en tapant :
-   ```bash
-   node -v
-   ```
-   Vous devriez voir la version 18.x.x s'afficher.
+  Pour les distributions basées sur Red Hat et CentOS :
+
+  1. Ouvrez un terminal et exécutez les commandes suivantes :
+     ```bash
+     curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
+     sudo yum install -y nodejs
+     ```
+  2. Vérifiez l'installation en tapant :
+     ```bash
+     node -v
+     ```
+     Vous devriez voir la version 18.x.x s'afficher.
+</details>
 
 ## Installation
 
