@@ -1,6 +1,9 @@
 # WYJScrapper
 
-This project is a scraper for Weekly Young Jump. It allows you to automatically retrieve the series Renai (rip), OnK, Uma Musume: Cinderella Gray on your Young Jump account and save them in a local folder.
+This project is a scraper for Weekly Young Jump. It allows you to automatically rip series from the YJ
+By default the series are : Renai (rip), OnK, Uma Musume: Cinderella Gray
+
+You can add a series by modifying the scrap.js in the "const scrappingSeries"
 
 ## Prerequisites
 
